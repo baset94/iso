@@ -2,16 +2,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(express.static('public'));
-
-// CSP-Header setzen
-app.use((req, res, next) => {
-    res.setHeader(
-        'Content-Security-Policy',
-        "default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https:; font-src 'self';"
-    );
-    next();
-});
+app.use(express.static('.'));  // Statt 'public'
 
 app.post('/api/trigger-workflow', express.json(), async (req, res) => {
     try {
