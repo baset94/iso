@@ -799,6 +799,10 @@
                 if (!resumeUrl) {
                     console.error('Keine resumeUrl verfügbar');
                     alert('Fehler: Keine Verbindung zum Workflow.');
+                    allButtons.forEach(btn => btn.disabled = false);
+                    if (clickedButton) {
+                        clickedButton.innerHTML = className;
+                    }
                     return;
                 }
 
@@ -817,10 +821,19 @@
                 const data = await response.json();
                 console.log('Class selection response:', data);
                 
+                // ✅ VERBESSERT: Korrekte Verarbeitung der n8n-Antwort
                 if (data.students && Array.isArray(data.students)) {
                     students = data.students;
+                    console.log(`${students.length} Schüler geladen:`, students);
                 } else {
+                    console.warn('Keine Schülerdaten erhalten:', data);
                     students = [];
+                }
+                
+                // ✅ NEU: ResumeUrl für nächsten Schritt aktualisieren
+                if (data.resumeUrl) {
+                    resumeUrl = data.resumeUrl;
+                    console.log('ResumeUrl aktualisiert:', resumeUrl);
                 }
                 
                 attendanceData = {};
